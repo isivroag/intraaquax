@@ -3,10 +3,10 @@
         
         function connect(){
         
-            define('servidor','ryzen7');
-            define('bd_nombre','aquast');
-            define('usuario','root');
-            define('password','tecniem');
+            define('servidor','grupoaquax.mx');
+            define('bd_nombre','grupoaqu_main');
+            define('usuario','grupoaqu_root');
+            define('password','GpoAquax.2024#');
 
             $opciones=array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
 

@@ -2,15 +2,13 @@ $('#formlogin').submit(function(e) {
     e.preventDefault();
     var usuario = $.trim($('#username').val());
     var password = $.trim($('#pass').val());
-    var recordar = 0;
-    if (document.getElementById("recordar").checked == true) {
-        recordar = 1;
-    }
+    var escuela =  $.trim($('#escuela').val());
+  
 
-    if (usuario.length == 0 || password.length == 0) {
+    if (usuario.length == 0 || password.length == 0 || escuela.length == 0) {
         Swal.fire({
-            title: 'Usuario y/o Contraseña faltantes',
-            text: "Debe ingresar un usuario y contraseña",
+            title: 'Usuario, Contraseña y/o Escuela faltantes',
+            text: "Debe ingresar un usuario, contraseña y una escuela",
             icon: 'warning',
         })
         return false;
@@ -19,7 +17,7 @@ $('#formlogin').submit(function(e) {
             url: "bd/login.php",
             type: "POST",
             datatype: "json",
-            data: { usuario: usuario, password: password, recordar: recordar },
+            data: { usuario: usuario, password: password, escuela: escuela },
             success: function(data) {
 
                 if (data == 1) {
@@ -34,7 +32,15 @@ $('#formlogin').submit(function(e) {
                         text: "Base de datos desconectada",
                         icon: 'error',
                     })
-                } else {
+                
+                }else if (data == 5) {
+                    Swal.fire({
+                        title: 'PERMISO DENEGADO',
+                        text: "El usuario no tiene acceso a la Escuela",
+                        icon: 'error',
+                    })
+                } 
+                else {
                     Swal.fire({
                         title: 'Conexion Exitosa',
                         confirmButtonColor: '#3085d6',
@@ -54,44 +60,3 @@ $('#formlogin').submit(function(e) {
 });
 
 
-$(document).ready(function() {
-
-    //--------------------- SELECCIONAR FOTO PRODUCTO ---------------------
-    $("#foto").on("change", function() {
-        var uploadFoto = document.getElementById("foto").value;
-        var foto = document.getElementById("foto").files;
-        var nav = window.URL || window.webkitURL;
-        var contactAlert = document.getElementById('form_alert');
-
-        if (uploadFoto != '') {
-            var type = foto[0].type;
-            var name = foto[0].name;
-            if (type != 'image/jpeg' && type != 'image/jpg' && type != 'image/png') {
-                contactAlert.innerHTML = '<p class="errorArchivo">El archivo no es válido.</p>';
-                $("#img").remove();
-                $(".delPhoto").addClass('notBlock');
-                $('#foto').val('');
-                return false;
-            } else {
-                contactAlert.innerHTML = '';
-                $("#img").remove();
-                $(".delPhoto").removeClass('notBlock');
-                var objeto_url = nav.createObjectURL(this.files[0]);
-                $(".prevPhoto").append("<img id='img' src=" + objeto_url + ">");
-                $(".upimg label").remove();
-
-            }
-        } else {
-            alert("No selecciono foto");
-            $("#img").remove();
-        }
-    });
-
-    $('.delPhoto').click(function() {
-        $('#foto').val('');
-        $(".delPhoto").addClass('notBlock');
-        $("#img").remove();
-
-    });
-
-});

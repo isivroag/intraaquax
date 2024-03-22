@@ -7,7 +7,22 @@ include_once "templates/navegacion.php";
 
 
 
+$escuela = $_SESSION['nom_escuela'];
+$bdescuela = $_SESSION['bd_escuela'];
 
+  include_once 'bd/conexionesc.php';
+
+
+$objeto = new conn();
+$conexion = $objeto->connect($bdescuela);
+$consultaprov = "SELECT * FROM info";
+$resultadoprov = $conexion->prepare($consultaprov);
+$resultadoprov->execute();
+$data = $resultadoprov->fetchAll(PDO::FETCH_ASSOC);
+$mensaje = "";
+foreach ($data as $row) {
+  $mensaje = $row['mensaje'];
+}
 
 
 ?>
@@ -32,11 +47,11 @@ include_once "templates/navegacion.php";
     <div class="container-fluid">
       <div class="card">
         <div class="card-header bg-gradient-navy">
-          <h3>GRUPO AQUAX: BIENVENIDO</h3>
+          <h3>GRUPO AQUAX: BIENVENIDO <?php echo $mensaje ?></h3>
         </div>
         <div class="card-body">
 
-         
+
 
         </div>
 
